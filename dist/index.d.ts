@@ -8,6 +8,6 @@ interface ViteGitRevisionPlugin {
     versionCommand?: string;
     branchCommand?: string;
 }
-declare const _default: (options: ViteGitRevisionPlugin) => Plugin;
+declare function GitRevision(options: ViteGitRevisionPlugin): Plugin;
 
-export { ViteGitRevisionPlugin, _default as default };
+export { ViteGitRevisionPlugin, GitRevision as default };
