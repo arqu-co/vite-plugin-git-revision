@@ -28,8 +28,7 @@ export interface ViteGitRevisionPlugin {
     branchCommand?: string;
 }
 
-
-export default (options: ViteGitRevisionPlugin): Plugin => {
+export default function GitRevision(options: ViteGitRevisionPlugin): Plugin {
     options = Object.assign(defaultOpt,options?options:{})
     if (options.versionCommand && options.lightweightTags) {
         throw new Error('lightweightTags can\'t be used together versionCommand')
@@ -38,8 +37,13 @@ export default (options: ViteGitRevisionPlugin): Plugin => {
     return {
       name: 'vite:git-revision',
       config(config:any) {
-          config.define.GITVERSION = JSON.stringify(runGitCommand(options.gitWorkTree,options.versionCommand))
-          config.define.GITBRANCH = JSON.stringify(runGitCommand(options.gitWorkTree,options.branchCommand))
+          const {define = {}} = config
+
+          config.define = {
+              ...define,
+              GITVERSION: JSON.stringify(runGitCommand(options.gitWorkTree,options.versionCommand)),
+              GITBRANCH: JSON.stringify(runGitCommand(options.gitWorkTree,options.branchCommand))
+          }
       }
     };
   };
